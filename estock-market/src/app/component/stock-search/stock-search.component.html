@@ -1,0 +1,116 @@
+<div class="app-content" >
+  <mat-expansion-panel *ngIf="isAuthenticateUser" [expanded]="true" hideToggle="true" class="example-headers-align">
+    <div class="padding10-top">
+      <mat-grid-list cols="10" rowHeight="75px">
+        <mat-grid-tile class="app-title-left" [colspan]="3">
+          <div class="form-container90percent">
+            <mat-form-field appearance="fill" class="width100percent">
+              <mat-label>Select an option</mat-label>
+              <mat-select disableRipple [formControl]="companyControl" required>
+               <mat-option *ngFor="let item of companyDetailsArray" [value]="item">{{item.companyName}}</mat-option>
+               </mat-select>
+            </mat-form-field>
+          </div>
+          
+    </mat-grid-tile>
+    <mat-grid-tile class="app-title-left" [colspan]="3" >
+      <div class="form-container90percent">
+      <mat-form-field appearance="fill" class="width100percent">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startdatepicker" [formControl]="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startdatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #startdatepicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    </mat-grid-tile>
+    <mat-grid-tile class="app-title-left" [colspan]="3">
+      <div class="form-container90percent">
+      <mat-form-field appearance="fill" class="width100percent"> 
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="enddatepicker" [formControl]="endDate">
+        <mat-datepicker-toggle matSuffix [for]="enddatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #enddatepicker></mat-datepicker>
+      </mat-form-field>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile class="app-title-right" [colspan]="1">
+        <div >
+          <button mat-raised-button color="primary" (click)="onSearchClick($event)" >Search</button>
+        </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    
+    </div>
+    </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="isAuthenticateUser && isUserClickOnSearch" [expanded]="true" hideToggle="true" class="app-expansion">
+    <div *ngIf="isCompLoading" class="center-grid"><mat-spinner [diameter]="50"></mat-spinner></div>
+    <div *ngIf="!isCompLoading && hasCompDetailsError" class="center-grid"><span class="error-text">Error Occured</span></div>
+    <div *ngIf="!isCompLoading && !hasCompDetailsError" class="padding10-top">
+    <mat-grid-list cols="12" rowHeight="75px">
+      <mat-grid-tile class="app-title-left" [colspan]="1">Company Code</mat-grid-tile>
+      <mat-grid-tile [colspan]="3"> 
+        <mat-form-field appearance="fill" class="height50 width100percent">
+          <mat-label>{{companyDetail?.companyCode}}</mat-label>
+          <input matInput [readonly]="true">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile class="app-title-left" [colspan]="1">Start Date</mat-grid-tile>
+      <mat-grid-tile [colspan]="3">
+        <mat-form-field appearance="fill" class="height50 width100percent">
+          <mat-label>{{startDateShow}}</mat-label>
+          <input matInput [readonly]="true">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile class="app-title-left" [colspan]="1">Min Price</mat-grid-tile>
+      <mat-grid-tile [colspan]="3">
+        <mat-form-field appearance="fill" class="height50 width100percent">
+          <mat-label>{{minPrice}} </mat-label>
+          <input matInput [readonly]="true">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile class="app-title-left" [colspan]="1">Company Name</mat-grid-tile>
+      <mat-grid-tile [colspan]="3">
+        <mat-form-field appearance="fill" class="height50 width100percent">
+          <mat-label>{{companyDetail?.companyName}}</mat-label>
+          <input matInput [readonly]="true">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile class="app-title-left" [colspan]="1">End Date</mat-grid-tile>
+      <mat-grid-tile [colspan]="3">
+        <mat-form-field appearance="fill" class="height50 width100percent">
+          <mat-label>{{endDateShow}}</mat-label>
+          <input matInput [readonly]="true">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile class="app-title-left" [colspan]="1">Max Price</mat-grid-tile>
+      <mat-grid-tile [colspan]="3"><mat-form-field appearance="fill" class="height50 width100percent">
+        <mat-label>{{maxPrice}}</mat-label>
+        <input matInput [readonly]="true">
+      </mat-form-field></mat-grid-tile>
+    </mat-grid-list>
+  </div>
+ </mat-expansion-panel>
+ <mat-expansion-panel *ngIf="isAuthenticateUser && isUserClickOnSearch" [expanded]="true" hideToggle="true" class="app-expansion">
+   <div *ngIf="isLoading" class="center-grid"><mat-spinner [diameter]="50"></mat-spinner></div>
+   <div *ngIf="!hasData && !isLoading && !hasError" class="center-grid no-data"><span>No Data Found</span></div>
+   <div *ngIf="!isLoading && hasError" class="center-grid"><mat-icon class="error-text">error</mat-icon><span class="error-text">error occured !!</span></div>
+  <div *ngIf="hasData && !isLoading && !hasError" class="padding10-top">
+    <table mat-table [dataSource]="stockDetail" class="mat-elevation-z8">
+    <ng-container matColumnDef="stockPrice">
+      <th mat-header-cell *matHeaderCellDef> Stock Price </th>
+      <td mat-cell *matCellDef="let element"> {{element.stockPrice}} </td>
+    </ng-container>
+    <ng-container matColumnDef="stockDateTime">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.stockDateTime}} </td>
+    </ng-container>
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef> Time </th>
+      <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+ </mat-expansion-panel>
+</div>
