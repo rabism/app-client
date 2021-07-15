@@ -20,10 +20,10 @@ getStockDetails(companyCode:string,startDate:string,endDate:string): Observable<
   .pipe(
     map((response : any)=>{
       return response.result.map((x : any)=>{
-        return new StockDetail(x.stockId,x.stockPrice,x.stockDateTime,x.time,x.companyCode);
+        return new StockDetail(x.stockId,x.stockPrice,x.stockDateTime,x.time,x.companyCode,x.exchangeName);
       });
     }),
-    catchError(this.handleError<StockDetail>('getStockDetails',new StockDetail('',0,'','','')))
+    catchError(this.handleError<StockDetail>('getStockDetails',new StockDetail('',0,'','','','')))
   );
 }
 

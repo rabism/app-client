@@ -41,7 +41,7 @@ export class StockSearchComponent implements OnInit,OnDestroy {
   hasError=false;
   minPrice:number=0;
   maxPrice:number=0;
-  displayedColumns: string[] = ['stockPrice', 'stockDateTime', 'time'];
+  displayedColumns: string[] = ['stockPrice', 'stockDateTime', 'time','exchangeName'];
   startDateShow:string;
   endDateShow:string;
   isUserClickOnSearch=false;

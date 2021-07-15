@@ -7,10 +7,10 @@ export class ConfigService {
   apiUrl : string;
 
   constructor() {
-    this.apiUrl='http://localhost:50461/';
+    this.apiUrl='';
    }
 
    getServerUrl(url: string) : string{
-     return this.apiUrl+url;
+     return url;
    }
 }
