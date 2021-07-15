@@ -1,8 +1,8 @@
 {
     "/api/*": {
-      "target": "http://localhost:50461",
+      "target": "http://gateway-service/",
       "secure": false,
       "logLevel": "debug",
       "changeOrigin": true
     }
-  }
+  } 
