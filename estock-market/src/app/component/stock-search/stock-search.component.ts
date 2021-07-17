@@ -14,6 +14,7 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import {default as _rollupMoment} from 'moment';
 import { ThrowStmt } from '@angular/compiler';
+import { StockSummary } from 'src/app/entity/stock-summary';
 
 const moment = _rollupMoment || _moment;
 @Component({
@@ -28,6 +29,7 @@ export class StockSearchComponent implements OnInit,OnDestroy {
   getAllStockSubscription: Subscription;
   companyDetailsArray:CompanyDetail[];
   stockDetail : StockDetail[];
+  stockSummary: StockSummary[];
   companyDetail: CompanyDetail;
   selectedCompany:string='';
   companyControl = new FormControl('', Validators.required);
@@ -42,10 +44,14 @@ export class StockSearchComponent implements OnInit,OnDestroy {
   minPrice:number=0;
   maxPrice:number=0;
   displayedColumns: string[] = ['stockPrice', 'stockDateTime', 'time','exchangeName'];
+  displayedColumnsSummary:string[] = ['exchangeName', 'minPrice', 'maxPrice','avgPrice'];
   startDateShow:string;
   endDateShow:string;
   isUserClickOnSearch=false;
   isAuthenticateUser=false;
+  companyOpenState=false;
+  stockDetailOpenState=false;
+  stockSummaryOpenState=false;
   constructor(private companyService:CompanyService
     ,private userService :UserService
     ,private stockService:StockService
@@ -126,7 +132,8 @@ export class StockSearchComponent implements OnInit,OnDestroy {
     this.isLoading=false;
    }))
    .subscribe((data : any)=>{
-     this.stockDetail =[...data]; 
+     this.stockDetail =[...data.detail]; 
+     this.stockSummary=[...data.summary];
      this.hasData=this.stockDetail.length>0;  
    },
    (error: any)=>{

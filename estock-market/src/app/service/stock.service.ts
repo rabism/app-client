@@ -3,7 +3,8 @@ import {  ConfigService} from './share/config.service'
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable, throwError,of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import {StockDetail} from '../entity/stock-detail'
+import {StockDetail} from '../entity/stock-detail';
+import {StockSummary} from '../entity/stock-summary'
 
 
 @Injectable({
@@ -14,14 +15,22 @@ export class StockService {
   constructor(private httpClient : HttpClient ,private configService : ConfigService) {
     this.getStockDetailUrl='api/v1.0/market/stock/get';
 }
-getStockDetails(companyCode:string,startDate:string,endDate:string): Observable<StockDetail>{
+getStockDetails(companyCode:string,startDate:string,endDate:string): Observable<any>{
   const url =this.configService.getServerUrl(this.getStockDetailUrl);
-  return this.httpClient.get<StockDetail>(`${url}/${companyCode}/${startDate}/${endDate}`)
+  return this.httpClient.get<any>(`${url}/${companyCode}/${startDate}/${endDate}`)
   .pipe(
     map((response : any)=>{
-      return response.result.map((x : any)=>{
-        return new StockDetail(x.stockId,x.stockPrice,x.stockDateTime,x.time,x.companyCode,x.exchangeName);
-      });
+      return {
+        detail: response.result.detail.map((x : any)=>{
+          return new StockDetail(x.stockId,x.stockPrice,x.stockDateTime,x.time,x.companyCode,x.exchangeName);
+  
+        }),
+        summary:response.result.summary.map((x : any)=>{
+          return new StockSummary(x.minPrice,x.maxPrice,x.avgPrice,x.exchangeName);
+  
+        })
+      }
+
     }),
     catchError(this.handleError<StockDetail>('getStockDetails',new StockDetail('',0,'','','','')))
   );

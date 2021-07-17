@@ -46,6 +46,10 @@ table {
   justify-content:center;
 }
 
+.mat-expansion-panel-header-title{
+  font-size: 18px !important;
+}
+
 
 
 

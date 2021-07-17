@@ -74,7 +74,8 @@
             },
             "development": {
               "browserTarget": "estock-market:build:development",
-              "proxyConfig": "src/proxy.conf.json"
+              "proxyConfig": ""
+              //"proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
